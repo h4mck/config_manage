@@ -1,4 +1,6 @@
 import tkinter as tk
+import sys
+import os
 
 KNOWN_COMMANDS = ["ls", "cd", "exit"]
 
@@ -11,6 +13,13 @@ def parse_command(command_str):
 def run_command():
     cmd_input = entry.get()
     command, args = parse_command(cmd_input)
+    comment = ""
+
+    for arg in args:
+        if arg.startswith("#"):
+            comment = args[args.index(arg):]
+            args = args[:args.index(arg)]
+            comment = " ".join(comment)
 
     if not command:
         output.insert(tk.END, "No command entered.\n")
@@ -24,13 +33,49 @@ def run_command():
         else:
             root.destroy()
     else:
-        output.insert(tk.END, f"{command} {args}\n")
+        output.insert(tk.END, f"{command} {args} {comment}\n")
 
     entry.delete(0, tk.END)
 
+def execute_script(script_path):
+    """Выполняет команды из файла скрипта"""
+    
+    if not os.path.exists(script_path):
+        output.insert(tk.END, f"Script file not found: {script_path}\n")
+        return
+    
+    with open(script_path, 'r') as f:
+        commands = f.readlines()
+    
+    for cmd in commands:
+        if cmd:
+            if cmd.lstrip().startswith("#"):
+                output.insert(tk.END, f"{str(cmd.lstrip()).rstrip()}\n")
+            else:
+                entry.delete(0, tk.END)
+                entry.insert(0, cmd)
+                output.insert(tk.END, f"{str(cmd.lstrip()).rstrip()}\n")
+                run_command()
+                root.update()
+
 # GUI setup
+title = "VFS"
+script = ""
+
+if len(sys.argv) > 0 and len(sys.argv) < 3:
+    title = sys.argv[0]
+    if len(sys.argv) == 2:
+        script = sys.argv[1]
+else:
+    if len(sys.argv) == 0:
+        print("Incorrect emulator call! Not enough parameters")
+    else:
+        print("Incorrect emulator call! Too many parameters")
+    sys.exit(1)
+
 root = tk.Tk()
-root.title("VFS")
+root.title(title)
+
 
 # Frame для приглашения и поля ввода
 input_frame = tk.Frame(root)
@@ -50,5 +95,9 @@ run_button.pack(pady=5)
 
 output = tk.Text(root, height=15, width=80, font=("Courier", 12))
 output.pack(padx=10, pady=10)
+
+if script:
+    # Запускаем выполнение скрипта после небольшой задержки, чтобы GUI успел инициализироваться
+    root.after(100, lambda: execute_script(script))
 
 root.mainloop()
