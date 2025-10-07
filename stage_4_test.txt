@@ -1,0 +1,46 @@
+# Stage 4 Test Script - New Commands Demonstration
+
+echo "=== Testing ls command ==="
+ls
+ls -a
+ls data
+
+echo "=== Testing cd command ==="  
+pwd
+cd data
+pwd
+cd ..
+pwd
+cd nonexistent
+cd /
+
+echo "=== Testing head command ==="
+head long_file.txt
+head -n 5 long_file.txt
+head server.log
+head -n 3 server.log
+head nonexistent.txt
+
+echo "=== Testing tail command ==="  
+tail long_file.txt
+tail -n 5 long_file.txt
+tail server.log
+tail -n 3 server.log
+
+echo "=== Testing uniq command ==="
+cat duplicates.txt
+uniq duplicates.txt
+uniq -c duplicates.txt
+uniq config.txt
+
+echo "=== Testing error cases ==="
+head
+tail
+uniq
+head -n not_number file.txt
+
+echo "=== Combined usage example ==="
+head -n 10 server.log
+tail -n 5 server.log
+
+echo "=== Stage 4 testing completed ==="
