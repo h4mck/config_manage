@@ -1,0 +1,6 @@
+# Error Test Script
+# This should show VFS load errors
+vfs-info
+ls
+cd test
+cat file.txt

@@ -1,0 +1,22 @@
+# Basic VFS Test Script
+# Testing VFS info command
+vfs-info
+
+# Testing directory navigation
+pwd
+ls
+cd folder1
+pwd
+ls
+cd ..
+pwd
+
+# Testing file reading
+cat file1.txt
+cat readme.txt
+
+# Testing error handling
+cd nonexistent_folder
+cat nonexistent_file.txt
+invalid_command
+

@@ -1,0 +1,18 @@
+# Complex VFS Test Script
+vfs-info
+
+# Navigate through multiple levels
+pwd
+ls
+cd level1
+pwd
+ls
+cd level2
+pwd
+ls
+cd ../..
+pwd
+
+# Test various file operations
+cat readme.txt
+
