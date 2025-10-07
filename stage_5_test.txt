@@ -1,0 +1,69 @@
+# Stage 5 Test Script - File Operations and Ownership
+# Testing VFS info to see initial state
+echo "=== Initial VFS State ==="
+vfs-info
+ls -l
+
+# Testing cp command
+echo "=== Testing cp command ==="
+echo "Creating copies of files..."
+cp original.txt copy1.txt
+cp config.cfg backup.cfg
+cp data/sample.dat sample_copy.dat
+cp original.txt data/copy_in_subdir.txt
+
+echo "Verifying copies..."
+cat copy1.txt
+cat backup.cfg
+ls -l
+
+# Testing chown command
+echo "=== Testing chown command ==="
+echo "Changing file ownership..."
+chown root readonly.txt
+chown admin config.cfg
+chown system data/sample.dat
+chown user copy1.txt
+
+echo "Verifying ownership changes..."
+ls -l
+ls -l data/
+
+# Testing combined operations
+echo "=== Testing combined operations ==="
+echo "Copy and change owner in one sequence..."
+cp app.log app_backup.log
+chown backup app_backup.log
+ls -l *.log
+
+# Testing error cases
+echo "=== Testing error cases ==="
+echo "Testing cp errors..."
+cp nonexistent.txt copy.txt
+cp original.txt
+cp
+
+echo "Testing chown errors..."
+chown
+chown newowner
+chown newowner nonexistent.txt
+
+# Demonstrating in-memory modifications
+echo "=== Demonstrating in-memory modifications ==="
+echo "Original VFS info:"
+vfs-info
+
+echo "Making several modifications..."
+cp original.txt copy2.txt
+cp config.cfg config_backup.cfg
+chown testuser copy2.txt
+chown testadmin config_backup.cfg
+
+echo "Modified VFS info:"
+vfs-info
+ls -l
+
+echo "All modifications exist only in memory!"
+echo "Original ZIP file remains unchanged."
+
+echo "=== Stage 5 testing completed ==="
